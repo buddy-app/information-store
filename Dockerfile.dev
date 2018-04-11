@@ -1,0 +1,41 @@
+FROM php:7.1-apache
+
+RUN apt-get -yqq update && apt-get -yqq upgrade && apt-get install -yqq wget
+
+RUN a2enmod rewrite
+
+RUN apt-get --no-install-recommends install -yqq \
+    libxrender1 \
+    libxrender-dev \
+    libfontconfig1 \
+    libfontconfig1-dbg \
+    libfontconfig1-dev \
+    libxext-dev \
+    libxext6 \
+    libxext6-dbg \
+    libxml2-dev \
+    ghostscript
+
+# Install wkhtmltopf
+RUN mkdir /opt/wkhtmltopdf
+WORKDIR /opt/wkhtmltopdf
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+RUN tar xvfJ wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+RUN ln -s /opt/wkhtmltopdf/wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
+RUN ln -s /opt/wkhtmltopdf/wkhtmltox/bin/wkhtmltoimage /usr/bin/wkhtmltoimage
+RUN rm wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+
+RUN apt-get clean
+
+COPY ./infrastructure/virtualhost/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
+
+# Install PHP Extensions
+RUN docker-php-ext-install opcache soap
+
+RUN yes | pecl install xdebug
+COPY ./infrastructure/php/xdebug.ini /usr/local/etc/php/conf.d
+RUN docker-php-ext-enable xdebug
+
+WORKDIR /var/www/html
+
+COPY . /var/www/html

@@ -1,0 +1,51 @@
+{
+    "name": "buddy-app/information-store",
+    "description": "information store for buddy app",
+    "keywords": [
+        "buddy-app",
+        "store"
+    ],
+    "license": "MIT",
+    "type": "project",
+    "config": {
+        "process-timeout": 4000
+    },
+    "require": {
+        "php": ">=7.2.0",
+        "laravel/lumen-framework": "5.6.*",
+        "vlucas/phpdotenv": "~2.2",
+        "palanik/lumen-cors": "dev-master",
+        "symfony/yaml": "^4.0"
+    },
+    "require-dev": {
+        "wakeonweb/swagger": "1.0.4",
+        "phpunit/phpunit": "~6.5",
+        "mockery/mockery": "~0.9",
+        "guzzlehttp/guzzle": "^6.0",
+        "symfony/psr-http-message-bridge": "v1.0.2",
+        "zendframework/zend-diactoros": "1.7.1",
+        "justinrainbow/json-schema": "5.2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "InformationStore\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ],
+        "psr-4": {
+            "InformationStore\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"copy('.env.example', '.env');\""
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "optimize-autoloader": true
+}

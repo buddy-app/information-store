@@ -1,0 +1,11 @@
+version: '2'
+services:
+  informationstore:
+    image: informationstore:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "3081:80"
